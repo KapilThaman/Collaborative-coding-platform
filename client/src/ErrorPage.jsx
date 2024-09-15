@@ -5,7 +5,7 @@ function ErrorPage() {
     <>
       {" "}
       <h1>Error</h1>
-      <h4>Make sure you enter the Name first.</h4>
+      <h4>Reload the page if you want to code</h4>
       
     </>
   );
