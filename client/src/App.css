@@ -67,10 +67,84 @@ button:hover {
   border-radius: 10px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  white-space: pre-wrap;
 }
 
 pre {
   text-align: left;
   margin: 0;
+}
+
+/* Tablet Styles (768px to 1024px) */
+@media (max-width: 1024px) {
+  #root {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  .editor-wrapper {
+    height: 400px;
+    padding: 0.75rem;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .output-area {
+    padding: 8px;
+  }
+}
+
+/* Mobile Styles (up to 768px) */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .editor-wrapper {
+    height: 300px;
+    padding: 0.5rem;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .output-area {
+    padding: 6px;
+  }
+}
+
+/* Small Mobile Styles (up to 480px) */
+@media (max-width: 480px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .editor-wrapper {
+    height: 250px;
+    padding: 0.5rem;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .output-area {
+    padding: 4px;
+  }
 }
