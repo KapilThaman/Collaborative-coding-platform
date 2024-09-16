@@ -1,3 +1,4 @@
+/* Base styles for all screen sizes */
 body {
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(45deg, #f3ec78, #af4261);
@@ -29,6 +30,17 @@ h1 {
 .users {
   margin: 20px 0;
   text-align: left;
+  display: inline-block;
+  width: 100%;
+}
+
+.users h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.users ol {
+  padding-left: 1rem;
 }
 
 .editor-wrapper {
@@ -39,6 +51,7 @@ h1 {
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 button {
@@ -67,6 +80,7 @@ button:hover {
   border-radius: 10px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 pre {
@@ -97,6 +111,14 @@ pre {
   .output-area {
     padding: 8px;
   }
+
+  .users h2 {
+    font-size: 1.25rem;
+  }
+
+  .users ol {
+    padding-left: 0.75rem;
+  }
 }
 
 /* Mobile Styles (up to 768px) */
@@ -122,6 +144,18 @@ pre {
   .output-area {
     padding: 6px;
   }
+
+  .users {
+    margin: 15px 0;
+  }
+
+  .users h2 {
+    font-size: 1.2rem;
+  }
+
+  .users ol {
+    padding-left: 0.5rem;
+  }
 }
 
 /* Small Mobile Styles (up to 480px) */
@@ -146,5 +180,34 @@ pre {
 
   .output-area {
     padding: 4px;
+  }
+
+  .users {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .users h2 {
+    font-size: 1rem;
+  }
+
+  .users ol {
+    padding-left: 0.25rem;
+    text-align: center;
+  }
+}
+
+/* Responsive grid for handling flex layout changes */
+@media (max-width: 480px) {
+  .editor-wrapper,
+  .output-area {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .users,
+  button,
+  .output-area {
+    margin: 10px auto;
   }
 }
