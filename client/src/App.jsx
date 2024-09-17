@@ -22,7 +22,7 @@ const App = () => {
   const [userNameAdded, setuserNameAdded] = useState(true);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8080');
+    const newSocket = io('https://collaborative-coding-backend.onrender.com');
     setSocket(newSocket);
 
     newSocket.on('requestUsername', () => {
