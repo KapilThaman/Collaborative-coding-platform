@@ -10,7 +10,6 @@ import { io } from 'socket.io-client';
 import './App.css';
 import ErrorPage from './ErrorPage';
 
-
 // Debounce function
 const debounce = (func, delay) => {
   let timerId;
@@ -27,23 +26,26 @@ const App = () => {
   const [cursors, setCursors] = useState({});
   const [output, setOutput] = useState('');
   const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(true); // Added loading state
   const latestCode = useRef(code);
   const editorRef = useRef(null);
-  const [userNameAdded, setuserNameAdded] = useState(true);
 
   useEffect(() => {
     const newSocket = io('http://localhost:8080');
     setSocket(newSocket);
 
+    newSocket.on('connect', () => {
+      console.log('Connected to backend');
+    });
+
     newSocket.on('requestUsername', () => {
       const name = prompt('Enter your username:');
-
-      if (name == null || !name || name === " ") {
-        setuserNameAdded(false);
-      }
-      if (name) {
-        setuserNameAdded(true);
+      if (name == null || !name || name.trim() === '') {
+        setUsername('');
+        setLoading(true); // Show main page if username is not added
+      } else {
         setUsername(name);
+        setLoading(false);
         newSocket.emit('setUsername', name);
       }
     });
@@ -86,7 +88,6 @@ const App = () => {
     };
   }, []);
 
-  // Debounced version of handleEditorChange
   const handleEditorChange = useCallback(debounce((editor, data, value) => {
     latestCode.current = value;
     setCode(value);
@@ -95,14 +96,18 @@ const App = () => {
     }
   }, 1000), [socket]);
 
-  const handleCursorMove = (editor) => {
+  const handleCursorMove = useCallback(() => {
     if (socket && editorRef.current) {
+      const editor = editorRef.current.editor;
       const position = editor.getCursor();
+      console.log(position);
+      console.log(cursors);
+      
       if (username) {
         socket.emit('cursorMove', { username, position });
       }
     }
-  };
+  }, [socket, username]);
 
   const handleExecuteCode = () => {
     if (socket) {
@@ -112,11 +117,10 @@ const App = () => {
 
   const cursorMarkers = Object.keys(cursors).map((username) => {
     const { line, ch } = cursors[username];
-    const lineHeight = 1.5;
+    const lineHeight = 20;
     const charWidth = 8;
-
-    const top = line * lineHeight;
-    const left = ch * charWidth;
+    const top = 25 + line * lineHeight;
+    const left = 50 + ch * charWidth;
     return (
       <div
         key={username}
@@ -139,7 +143,11 @@ const App = () => {
 
   return (
     <>
-      {userNameAdded ? (
+      {loading ? (
+        <div className="loading">
+          <p>Loading...</p>
+        </div>
+      ) : username ? (
         <div className="App">
           <header>
             <h1>Code Collaboration</h1>
@@ -168,7 +176,7 @@ const App = () => {
                 setCode(value);
               }}
               onChange={handleEditorChange}
-              onCursorActivity={(editor) => handleCursorMove(editor)}
+              onCursorActivity={handleCursorMove}
               ref={editorRef}
             />
             {cursorMarkers}
