@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -9,6 +9,16 @@ import 'codemirror/addon/lint/javascript-lint';
 import { io } from 'socket.io-client';
 import './App.css';
 import ErrorPage from './ErrorPage';
+
+
+// Debounce function
+const debounce = (func, delay) => {
+  let timerId;
+  return function (...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => func.apply(this, args), delay);
+  };
+};
 
 const App = () => {
   const [code, setCode] = useState('// Start coding...');
@@ -22,7 +32,7 @@ const App = () => {
   const [userNameAdded, setuserNameAdded] = useState(true);
 
   useEffect(() => {
-    const newSocket = io('https://collaborative-coding-backend.onrender.com');
+    const newSocket = io('http://localhost:8080');
     setSocket(newSocket);
 
     newSocket.on('requestUsername', () => {
@@ -76,13 +86,14 @@ const App = () => {
     };
   }, []);
 
-  const handleEditorChange = (editor, data, value) => {
+  // Debounced version of handleEditorChange
+  const handleEditorChange = useCallback(debounce((editor, data, value) => {
     latestCode.current = value;
     setCode(value);
     if (socket) {
       socket.emit('codeChange', value);
     }
-  };
+  }, 1000), [socket]);
 
   const handleCursorMove = (editor) => {
     if (socket && editorRef.current) {
@@ -150,7 +161,7 @@ const App = () => {
                 mode: 'javascript',
                 theme: 'material',
                 lineNumbers: true,
-                lint: true,
+                lint: false,
                 gutters: ['CodeMirror-lint-markers'],
               }}
               onBeforeChange={(editor, data, value) => {
