@@ -31,7 +31,7 @@ const App = () => {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io('https://collaborative-coding-backend.onrender.com');
+    const newSocket = io('https://collaborative-coding-platform-three.vercel.app/');
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -87,6 +87,14 @@ const App = () => {
       newSocket.close();
     };
   }, []);
+
+  useEffect(() => {
+    if (username) {
+      document.title = `${username}'s Collaborative Coding`; // Update title dynamically
+    } else {
+      document.title = 'Collaborative Coding App'; // Default title if username is not set
+    }
+  }, [username]);
 
   const handleEditorChange = useCallback(debounce((editor, data, value) => {
     latestCode.current = value;
