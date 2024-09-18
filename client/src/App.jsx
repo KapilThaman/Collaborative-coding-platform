@@ -31,7 +31,7 @@ const App = () => {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io('https://collaborative-coding-platform-three.vercel.app');
+    const newSocket = io('https://collaborative-coding-backend.onrender.com');
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
